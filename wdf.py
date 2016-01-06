@@ -127,7 +127,7 @@ def login():
 
 	request = urllib.request.Request(url = redirect_uri)
 	response = urllib.request.urlopen(request)
-	data = response.read()
+	data = response.read().decode('utf-8')
 
 	# print data
 
@@ -177,10 +177,10 @@ def webwxinit():
 		'BaseRequest': BaseRequest
 	}
 
-	request = urllib.Request(url = url, data = json.dumps(params))
+	request = urllib.request.Request(url = url, data = json.dumps(params).encode('utf-8'))
 	request.add_header('ContentType', 'application/json; charset=UTF-8')
-	response = urllib.urlopen(request)
-	data = response.read()
+	response = urllib.request.urlopen(request)
+	data = response.read().decode('utf-8')
 
 	if DEBUG == True:
 		f = open(os.getcwd() + '/webwxinit.json', 'wb')
@@ -208,10 +208,10 @@ def webwxgetcontact():
 	
 	url = base_uri + '/webwxgetcontact?pass_ticket=%s&skey=%s&r=%s' % (pass_ticket, skey, int(time.time()))
 
-	request = urllib.Request(url = url)
+	request = urllib.request.Request(url = url)
 	request.add_header('ContentType', 'application/json; charset=UTF-8')
-	response = urllib.urlopen(request)
-	data = response.read()
+	response = urllib.request.urlopen(request)
+	data = response.read().decode('utf-8')
 
 	if DEBUG == True:
 		f = open(os.getcwd() + '/webwxgetcontact.json', 'wb')
@@ -225,7 +225,7 @@ def webwxgetcontact():
 
 	# 倒序遍历,不然删除的时候出问题..
 	SpecialUsers = ['newsapp', 'fmessage', 'filehelper', 'weibo', 'qqmail', 'fmessage', 'tmessage', 'qmessage', 'qqsync', 'floatbottle', 'lbsapp', 'shakeapp', 'medianote', 'qqfriend', 'readerapp', 'blogapp', 'facebookapp', 'masssendapp', 'meishiapp', 'feedsapp', 'voip', 'blogappweixin', 'weixin', 'brandsessionholder', 'weixinreminder', 'wxid_novlwrv3lqwv11', 'gh_22b87fa7cb3c', 'officialaccounts', 'notification_messages', 'wxid_novlwrv3lqwv11', 'gh_22b87fa7cb3c', 'wxitil', 'userexperience_alarm', 'notification_messages']
-	for i in xrange(len(MemberList) - 1, -1, -1):
+	for i in range(len(MemberList) - 1, -1, -1):
 		Member = MemberList[i]
 		if Member['VerifyFlag'] & 8 != 0: # 公众号/服务号
 			MemberList.remove(Member)
@@ -252,10 +252,10 @@ def createChatroom(UserNames):
 		'Topic': '',
 	}
 
-	request = urllib.Request(url = url, data = json.dumps(params))
+	request = urllib.request.Request(url = url, data = json.dumps(params).encode('utf-8'))
 	request.add_header('ContentType', 'application/json; charset=UTF-8')
-	response = urllib.urlopen(request)
-	data = response.read()
+	response = urllib.request.urlopen(request)
+	data = response.read().decode('utf-8')
 
 	# print data
 
@@ -281,10 +281,10 @@ def deleteMember(ChatRoomName, UserNames):
 		'DelMemberList': ','.join(UserNames),
 	}
 
-	request = urllib.Request(url = url, data = json.dumps(params))
+	request = urllib.request.Request(url = url, data = json.dumps(params).encode('utf-8'))
 	request.add_header('ContentType', 'application/json; charset=UTF-8')
-	response = urllib.urlopen(request)
-	data = response.read()
+	response = urllib.request.urlopen(request)
+	data = response.read().decode('utf-8')
 
 	# print data
 
@@ -307,10 +307,10 @@ def addMember(ChatRoomName, UserNames):
 		'AddMemberList': ','.join(UserNames),
 	}
 
-	request = urllib.Request(url = url, data = json.dumps(params))
+	request = urllib.request.Request(url = url, data = json.dumps(params).encode('utf-8'))
 	request.add_header('ContentType', 'application/json; charset=UTF-8')
-	response = urllib.urlopen(request)
-	data = response.read()
+	response = urllib.request.urlopen(request)
+	data = response.read().decode('utf-8')
 
 	# print data
 
@@ -359,11 +359,11 @@ def main():
 
 	ChatRoomName = ''
 	result = []
-	for i in xrange(0, int(math.ceil(MemberCount / float(MAX_GROUP_NUM)))):
+	for i in range(0, int(math.ceil(MemberCount / float(MAX_GROUP_NUM)))):
 		UserNames = []
 		NickNames = []
 		DeletedList = ''
-		for j in xrange(0, MAX_GROUP_NUM):
+		for j in range(0, MAX_GROUP_NUM):
 			if i * MAX_GROUP_NUM + j >= MemberCount:
 				break
 
@@ -372,9 +372,9 @@ def main():
 			NickNames.append(Member['NickName'].encode('utf-8'))
                         
 		print('第%s组...' % (i + 1))
-		print(', '.join(NickNames))
+		print(', '.encode('utf-8').join(NickNames))
 		print('回车键继续...')
-		input()
+#		input()
 
 		# 新建群组/添加成员
 		if ChatRoomName == '':
@@ -404,7 +404,7 @@ def main():
 			resultNames.append(NickName.encode('utf-8'))
 
 	print('---------- 被删除的好友列表 ----------')
-	print('\n'.join(resultNames))
+	print('\n'.encode('utf-8').join(resultNames).decode('utf-8'))
 	print('-----------------------------------')
 
 # windows下编码问题修复
@@ -430,9 +430,9 @@ if __name__ == '__main__' :
 
 	print('本程序的查询结果可能会引起一些心理上的不适,请小心使用...')
 	print('回车键继续...')
-	input()
+#	input()
 
 	main()
 
 	print('回车键结束')
-	input()
+#	input()
